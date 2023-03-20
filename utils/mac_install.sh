@@ -254,7 +254,7 @@ function __allow_touch_id_sudo () {
   replace_str='auth       sufficient     pam_tid.so';
   str_present="$(check_in_file "auth.*sufficient.*pam_tid.so" "${pam_sudo_path}")";
   if [[ ${str_present} == false ]]; then
-    # Edit /private/etc/pam.d/sudo
+    # NOTE: Edit /private/etc/pam.d/sudo
     # + Add: 'auth       sufficient     pam_tid.so' to the first line
     # + IMPORTANT It needs to be above the other options!
     # sudo replace_in_file "auth.*sufficient.*pam_tid.so" "${replace_str}" "${pam_sudo_path}";

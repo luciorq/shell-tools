@@ -34,7 +34,6 @@ function __update_homebrew () {
 function __update_brew_casks () {
   local brew_bin;
   brew_bin=$(require 'brew');
-
   "${brew_bin}" cu --all --force --yes;
   return 0;
 }
