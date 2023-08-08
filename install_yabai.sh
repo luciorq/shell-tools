@@ -45,6 +45,9 @@ function __install_yabai () {
   # + sudo nvram boot-args=-arm64e_preview_abi
 
   # Create a self signing certificate
+  # + Keychain Access > Topbar Menu > Keychain Acces >
+  # + Certificate Assistant > Create Certificate ...
+  # + Make sure to choose "code signing" option.
   builtin echo >&2 -ne \
     "Create a Self Signing certificate to continue.\nPress Enter to Continue:";
   builtin read -r _xav;

@@ -8,6 +8,7 @@ function show_key_press () {
   if [[ ${is_kitty} == true ]]; then
     kitty +kitten show_key -m kitty;
   fi
+  return 0;
 }
 
 

@@ -115,5 +115,7 @@ function __remove_chattr_trojan () {
     builtin echo -ne "${_j}\n";
   done
 
+  # "${sudo_bin}" DEBIAN_FRONTEND=noninteractive apt upgrade --yes;
+
   builtin return 0;
 }
