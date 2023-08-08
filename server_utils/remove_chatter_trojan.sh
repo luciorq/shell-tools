@@ -5,6 +5,7 @@
 # + git clone https://github.com/tytso/e2fsprogs
 # + preferentially compile on a different machine
 function __compile_e2fsprogs () {
+  # builtin local mkdir_bin;
   mkdir -p "${HOME}/workspaces/temp";
   builtin cd "${HOME}/workspaces/temp" || exit;
   git clone https://github.com/tytso/e2fsprogs;
@@ -14,7 +15,7 @@ function __compile_e2fsprogs () {
   ../configure;
   make;
   make check;
-  return 0;
+  builtin return 0;
 }
 
 function __remove_chattr_trojan () {
@@ -80,8 +81,10 @@ function __remove_chattr_trojan () {
     builtin echo -ne "Removed: '${_file}'\n";
   done
 
+  # try apt update?
+  "${sudo_bin}" DEBIAN_FRONTEND=noninteractive apt update --yes;
   # Fix stuck dpkg
-  "${sudo_bin}" apt --fix-broken install;
+  "${sudo_bin}" DEBIAN_FRONTEND=noninteractive apt --fix-broken --yes install;
 
   declare -a _pkg_arr=(
     cpio
@@ -98,7 +101,7 @@ function __remove_chattr_trojan () {
 
   # --allow-change-removed-packages \
   for _pkg in "${_pkg_arr[@]}"; do
-    "${sudo_bin}" apt install \
+    "${sudo_bin}" DEBIAN_FRONTEND=noninteractive apt install \
       --yes \
       --reinstall \
       --purge \
@@ -112,5 +115,5 @@ function __remove_chattr_trojan () {
     builtin echo -ne "${_j}\n";
   done
 
-  return 0;
+  builtin return 0;
 }
