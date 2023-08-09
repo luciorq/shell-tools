@@ -134,3 +134,10 @@ function __system_update_ubuntu () {
   return 0;
 }
 
+# update and clean apt based system
+function __update_apt_pkgs () {
+  \sudo DEBIAN_FRONTEND=noninteractive apt update -yq \
+    && \sudo DEBIAN_FRONTEND=noninteractive apt upgrade -yq \
+    && \sudo DEBIAN_FRONTEND=noninteractive apt autoremove --purge -y -q;
+  builtin return 0;
+}
