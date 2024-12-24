@@ -77,8 +77,8 @@ function __install_yabai () {
     return 1;
   fi
 
-  codesign -fs 'yabai-cert' $(which_bin 'yabai');
-  codesign -fs 'yabai-cert' $(which_bin 'skhd');
+  \codesign -fs 'yabai-cert' "$(which_bin 'yabai')";
+  \codesign -fs 'yabai-cert' "$(which_bin 'skhd')";
 
   # copy example config files
   # TODO: @luciorq Make it xdg base dirs compliant, i.e. add XDG variables
@@ -146,6 +146,10 @@ function __install_yabai () {
   defaults write com.apple.finder DisableAllAnimations -bool true;
   # If this setting needs to be reset, execute:
   # + defaults delete com.apple.finder DisableAllAnimations
-  return 0;
+
+  # Disable window animations, relevant for Chrome
+  defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
+
+  builtin return 0;
 }
 
