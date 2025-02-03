@@ -10,4 +10,4 @@ Some of the scripts in this repository require a modern version of Bash Shell to
 
 The systems administration tools are designed to work on modern GNU/Linux or MacOS.
 
-[shell-lib](https://github.com/luciorq/shell-lib)
+[shell-lib]: https://github.com/luciorq/shell-lib
