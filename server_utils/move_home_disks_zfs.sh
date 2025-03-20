@@ -1,4 +1,4 @@
-/usr/bin/env bash
+#!/usr/bin/env bash
 
 # NOTE: Highly distructive script, make sure to read and understant it before running
 
