@@ -249,28 +249,22 @@ function __allow_touch_id_sudo () {
   local sudo_bin;
   local replace_str;
   sudo_bin="$(require 'sudo')";
-  pam_sudo_path='/private/etc/pam.d/sudo';
+  pam_sudo_path='/private/etc/pam.d/sudo_local';
   # TODO: @luciorq Add automatic replace
-  replace_str='auth       sufficient     pam_tid.so';
+  # replace_str='auth       sufficient     pam_tid.so';
   str_present="$(check_in_file "auth.*sufficient.*pam_tid.so" "${pam_sudo_path}")";
   if [[ ${str_present} == false ]]; then
-    # NOTE: Edit /private/etc/pam.d/sudo
+    # NOTE: @luciorq Edit /private/etc/pam.d/sudo_local
     # + Add: 'auth       sufficient     pam_tid.so' to the first line
     # + IMPORTANT It needs to be above the other options!
     # sudo replace_in_file "auth.*sufficient.*pam_tid.so" "${replace_str}" "${pam_sudo_path}";
-    builtin echo -ne "Insert the following:\n";
-    builtin echo -ne "--> 'auth       sufficient     pam_tid.so'\n";
-    builtin echo -ne "To the first line of ${pam_sudo_path}\n";
-    builtin echo -ne "Press enter to continue:"
-    # NOTE: @luciorq this line is used to wait for user input ...
-    builtin read -r wait_var;
-    builtin echo -ne "${wait_var}" > /dev/null;
-    "${sudo_bin}" visudo "${pam_sudo_path}";
-    builtin echo -ne "TouchID sudo enabled.\n";
+    "${sudo_bin}" sed -e 's/^#auth/auth/' /etc/pam.d/sudo_local.template \
+      | "${sudo_bin}" tee /etc/pam.d/sudo_local;
+    \builtin echo -ne "TouchID sudo enabled.\n";
   else
-    builtin echo -ne "TouchID sudo already enabled.\n";
+    \builtin echo -ne "TouchID sudo already enabled.\n";
   fi
-  return 0;
+  \builtin return 0;
 }
 
 # Open MacOS options menu
