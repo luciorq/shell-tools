@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# TODO: @luciorq Highly WIP - mostly not working
+
+# TODO: @luciorq wishlist?
+# Add to readline config inputrc
+# set page-completions off
+
 # ==========================================================
 # MacOS vars
 # TODO luciorq move those to bashrc or custom script called
@@ -16,8 +22,37 @@ function __source_mac_vars () {
   fi
 }
 
-# Add to readline config inputrc
-# set page-completions off
+# ==========================================================
+# Functions
+
+function __source_dev_deps () {
+  local org_name='luciorq';
+  local repo_name='shell-lib';
+  local shell_lib_path="${_LOCAL_PROJECT:-${HOME}/projects}/${repo_name}";
+  local src_fun_arr src_fun src_file_path;
+
+  declare -a src_fun_arr=(
+    force-xdg-basedirs
+    which_bin
+    exit_fun
+    require
+    is_installed
+    source_remote
+    mac_install
+    mac_update
+    config_utils
+  )
+
+  for src_fun in "${src_fun_arr[@]}";
+  do
+    src_file_path="${shell_lib_path}/${src_fun}.sh"
+    if [[ -f ${src_file_path} ]]; then
+      builtin source "${src_file_path}";
+    else
+      __source_remote_shell-lib "${src_file_path}" "${org_name}/${repo_name}";
+    fi
+  done
+}
 
 # ==========================================================
 # Main
@@ -25,7 +60,7 @@ function __source_mac_vars () {
 function install_macos () {
   builtin local sys_arch;
   builtin local sudo_bin;
-  sys_arch="$(uname -m)";
+  # sys_arch="$(uname -m)";
 
   __source_mac_vars;
   __source_dev_deps;
@@ -48,35 +83,3 @@ function install_macos () {
   __update_configs;
   __allow_touch_id_sudo;
 }
-
-# ==========================================================
-# Functions
-
-function __source_dev_deps () {
-  local org_name='luciorq';
-  local repo_name='shell-lib';
-  local shell_lib_path="${_LOCAL_PROJECT:-${HOME}/projects}/${repo_name}";
-  local src_fun_arr src_fun src_file_path;
-
-  declare declare -a src_fun_arr=(
-    force-xdg-basedirs
-    which_bin
-    exit_fun
-    require
-    is_installed
-    source_remote
-    mac_install
-    mac_update
-    config_utils
-  )
-
-  for src_fun in ${src_fun_arr[@]}; then
-    src_file_path="${shell_lib_path}/${src_fun}.sh"
-    if [[ -f ${src_fun_path} ]]; then
-      builtin source "${src_fun_path}";
-    else
-      __source_remote_shell-lib "${src_fun_path}" "${org_name}/${repo_name}";
-    fi
-  done
-}
-

@@ -9,7 +9,7 @@ function __install_macos_devtools () {
   local sudo_bin;
   local mkdir_bin;
   local _i;
-  local _j
+  local _j;
   # local ln_bin;
   xcs_bin="$(which_bin 'xcode-select')";
   sudo_bin="$(which_bin 'sudo')";
@@ -60,12 +60,12 @@ function __install_rosetta () {
   local swu_bin;
   local sudo_bin;
   local pgrep_bin;
-  local lsbom_bin;
-  local file_res;
+  #local lsbom_bin;
+  #local file_res;
   local proc_res;
   local has_rosetta;
   local updater_path;
-  local bom_path;
+  #local bom_path;
   local sys_arch;
 
   swu_bin="$(which_bin 'softwareupdate')";
@@ -89,7 +89,7 @@ function __install_rosetta () {
     builtin echo -ne "Rosetta2 files found...\n";
   fi
 
-  proc_res=$("${pgrep_bin}" oahd >/dev/null 2>&1; echo $?)
+  proc_res="$("${pgrep_bin}" oahd >/dev/null 2>&1; builtin echo ${?})";
   if [[ ${proc_res} -eq 0 ]]; then
     has_rosetta='yes';
     builtin echo -ne "Rosetta2 process running...\n";
@@ -119,10 +119,12 @@ function __install_homebrew () {
   local bash_bin;
   curl_bin="$(which_bin 'curl')";
   bash_bin="$(which_bin 'bash')";
-  # TODO luciorq Check for non-interactive install instructions
+  # TODO: @luciorq Check for non-interactive install instructions
+
+  # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   "${bash_bin}" -c \
     "$(${curl_bin} -fsSL \
-    https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)";
   builtin echo -ne "Homebrew installed.\n";
   brew_bin="$(which_bin 'brew')";
   "${brew_bin}" doctor;
@@ -142,7 +144,7 @@ function __install_homebrew () {
 
   "${brew_bin}" reinstall gcc;
 
-  return 0;
+  \builtin return 0;
 }
 
 # Install Homebrew packages
@@ -202,16 +204,17 @@ function __update_bash_shell () {
   bash_bin="$(brew --prefix)/bin/bash";
   is_bash_allowed="$(
     "${cat_bin}" /private/etc/shells \
-      | grep "${bash_bin}" || builtin echo -ne ''
+      | grep "${bash_bin}" \
+      || \builtin echo -ne ''
   )";
   if [[ -z ${is_bash_allowed} ]]; then
-    builtin echo "${bash_bin}" | sudo tee -a /private/etc/shells;
+    \builtin echo "${bash_bin}" | \sudo tee -a /private/etc/shells;
   fi
   sudo chpass -s "${bash_bin}" "${USER}";
-  # TODO luciorq Change the default shell in Terminal App
-  builtin read -r _temp_var;
-  unset _temp_var;
-  return 0;
+  # TODO: luciorq Change the default shell in Terminal App
+  \builtin read -r _temp_var;
+  \builtin unset _temp_var;
+  \builtin return 0;
 }
 
 # Install fonts for macOS
